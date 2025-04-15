@@ -14,7 +14,7 @@ const takeToken = async (username, password) => {
     }
 
     // Token yaratish
-    const token = jwt.sign({ username: user.username }, secretKey, { expiresIn: '1h' });
+    const token = jwt.sign({ username: user.username }, secretKey);
     return token;
 };
 
