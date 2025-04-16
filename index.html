@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablar bilan Jadval</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4; /* Oq fon */
+}
+
+.tab-container {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 12px 20px;
+    background-color: #007bff; /* Ko'k rang */
+    color: white;
+    cursor: pointer;
+    border-radius: 5px 5px 0 0;
+    margin-right: 5px;
+    transition: background-color 0.3s;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tab:hover {
+    background-color: #0056b3; /* To'yingan ko'k rang */
+}
+
+.tab.active {
+    background-color: #0056b3; /* Faol tab rang */
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.data-table th, .data-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.data-table th {
+    background-color: #007bff; /* Ko'k rang */
+    color: white;
+}
+
+.data-table tbody tr {
+    display: none; /* Dastlabda barcha satrlar yashiriladi */
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Alternativ satrlar uchun rang */
+}
+
+.data-table tbody tr:hover {
+    background-color: #e7f1ff; /* Hover effekt */
+}
+    </style>
+</head>
+<body>
+    <div class="tab-container">
+        <div class="tab active" id="new">Yangilar</div>
+        <div class="tab" id="completed">Hozirlanganlar</div>
+        <div class="tab" id="today">Bugun bajarilganlar</div>
+    </div>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Vazifa</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="new-task">
+                <td>1</td>
+                <td>Vazifa 1</td>
+                <td>Yangilangan</td>
+            </tr>
+            <tr class="completed-task">
+                <td>2</td>
+                <td>Vazifa 2</td>
+                <td>Hozirlangan</td>
+            </tr>
+            <tr class="today-task">
+                <td>3</td>
+                <td>Vazifa 3</td>
+                <td>Bugun bajarilgan</td>
+            </tr>
+        </tbody>
+    </table>
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        const rows = document.querySelectorAll('.data-table tbody tr');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const selectedTab = tab.id;
+                rows.forEach(row => {
+                    row.style.display = 'none'; // Barcha satrlarni yashirish
+                    if (row.classList.contains(`${selectedTab}-task`)) {
+                        row.style.display = ''; // Tanlangan tabga mos satrlarni ko'rsatish
+                    }
+                });
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+
+        // Dastlabki tabni faollashtirish
+        document.getElementById('new').click();
+    </script>
+</body>
+</html>
