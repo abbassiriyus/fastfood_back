@@ -49,7 +49,7 @@ CREATE TABLE zakaz_products (
     id SERIAL PRIMARY KEY,
     product_id INT,   
     zakaz_id INT,
-   count INT,
+    count INT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 );
