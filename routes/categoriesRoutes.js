@@ -1,5 +1,5 @@
 const express = require('express');
-const pool = require('./db'); // db.js faylidan poolni import qilish
+const pool = require('../db'); // db.js faylidan poolni import qilish
 
 const router = express.Router();
 

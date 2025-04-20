@@ -1,16 +1,16 @@
 const express = require('express');
-const pool = require('./db'); // db.js faylidan poolni import qilish
+const pool = require('../db'); // db.js faylidan poolni import qilish
 
 const router = express.Router();
 
 // Yangi zakaz yaratish
 router.post('/', async (req, res) => {
-    const { user_id } = req.body;
+    const { user_id,status } = req.body;
     
     try {
         const result = await pool.query(
-            'INSERT INTO zakaz (user_id) VALUES ($1) RETURNING *',
-            [user_id]
+            'INSERT INTO zakaz (user_id,status) VALUES ($1,$2) RETURNING *',
+            [user_id, status]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
@@ -40,12 +40,12 @@ router.get('/:id', async (req, res) => {
 // Zakazni yangilash
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { user_id } = req.body;
+    const { user_id,status } = req.body;
 
     try {
         const result = await pool.query(
-            'UPDATE zakaz SET user_id = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
-            [user_id, id]
+            'UPDATE zakaz SET user_id = $1,status=$2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *',
+            [user_id,status, id]
         );
         const updatedZakaz = result.rows[0];
 
