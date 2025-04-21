@@ -5,11 +5,11 @@ const router = express.Router();
 
 // Create a new category
 router.post('/', async (req, res) => {
-    const { name, fastfood_id } = req.body;
+    const { name, fastfood_id,order } = req.body;
     try {
         const result = await pool.query(
-            'INSERT INTO categories (name, fastfood_id) VALUES ($1, $2) RETURNING *',
-            [name, fastfood_id]
+            'INSERT INTO categories (name, fastfood_id,order) VALUES ($1, $2,$3) RETURNING *',
+            [name, fastfood_id,order]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
@@ -47,11 +47,11 @@ router.get('/:id', async (req, res) => {
 // Update a category
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { name, fastfood_id } = req.body;
+    const { name, fastfood_id,order } = req.body;
     try {
         const result = await pool.query(
-            'UPDATE categories SET name = $1, fastfood_id = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 RETURNING *',
-            [name, fastfood_id, id]
+            'UPDATE categories SET name = $1, fastfood_id = $2,order=$3, updated_at = CURRENT_TIMESTAMP WHERE id = $4 RETURNING *',
+            [name, fastfood_id,order, id]
         );
         if (result.rows.length === 0) {
             return res.status(404).json({ error: 'Category not found' });

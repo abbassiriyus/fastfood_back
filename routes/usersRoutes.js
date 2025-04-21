@@ -10,13 +10,13 @@ const secretKey = 'your_secret_key'; // Maxfiy kalit
 
 // Foydalanuvchini ro'yxatdan o'tkazish
 router.post('/register', async (req, res) => {
-    const { username, phone_number, password, type, description, prosent,is_active} = req.body;
+    const { username, phone_number, password, type, description, prosent,is_active,order} = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
     var image =upload_file()
     try {
         const result = await pool.query(
-            'INSERT INTO users (username, phone_number, password, type,image, description, prosent,is_active) VALUES ($1, $2, $3, $4,$5,$6,$7,$8) RETURNING *',
-            [username, phone_number, hashedPassword, type,image, description, prosent,is_active]
+            'INSERT INTO users (username, phone_number, password, type,image, description, prosent,is_active,order) VALUES ($1, $2, $3, $4,$5,$6,$7,$8,$9) RETURNING *',
+            [username, phone_number, hashedPassword, type,image, description, prosent,is_active,order]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
@@ -66,15 +66,15 @@ router.get('/:id', async (req, res) => {
 // Foydalanuvchini yangilash
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { username, phone_number, type, is_active,description,prosent,} = req.body;
+    const { username, phone_number, type, is_active,description,prosent,order} = req.body;
 
     try {
         const result1 = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
         const user = result1.rows[0];
         var image=put_file(user.image,req)
         const result = await pool.query(
-            'UPDATE users SET username = $1, phone_number = $2, type = $3, is_active = $4, image=$5, description=$6,prosent=$7, updated_at = CURRENT_TIMESTAMP WHERE id = $8 RETURNING *',
-            [username, phone_number, type, is_active,image,description,prosent, id]
+            'UPDATE users SET username = $1, phone_number = $2, type = $3, is_active = $4, image=$5, description=$6,prosent=$7, updated_at = CURRENT_TIMESTAMP,order=$8 WHERE id = $9 RETURNING *',
+            [username, phone_number, type, is_active,image,description,prosent,order,id]
         );
         const updatedUser = result.rows[0];
 

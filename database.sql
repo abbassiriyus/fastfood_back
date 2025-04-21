@@ -6,13 +6,13 @@ CREATE TABLE users (
     image TEXT,
     description TEXT,
     count_seen INTEGER DEFAULT 0,
-    prosent INTEGER,
-    password VARCHAR(255) NOT NULL,
+    prosent FLOAT,
+    order INTEGER,
+    password VARCHAR(255) UNIQUE NOT NULL,  -- UNIQUE cheklovi qo'shildi
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT FALSE
 );
-
 
 CREATE TABLE carousel (
     id SERIAL PRIMARY KEY,
@@ -26,6 +26,7 @@ CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     fastfood_id INT,
+    order INTEGER,
     FOREIGN KEY (fastfood_id) REFERENCES fastfood(id),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -57,3 +58,29 @@ CREATE TABLE zakaz_products (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+GRANT USAGE, SELECT ON SEQUENCE users_id_seq TO hayyatuz_menugo_user;
+
+ALTER SEQUENCE carousel_id_seq OWNED BY carousel.id;
+GRANT USAGE, SELECT ON SEQUENCE carousel_id_seq TO hayyatuz_menugo_user;
+
+
+
+ALTER SEQUENCE categories_id_seq OWNED BY categories.id;
+GRANT USAGE, SELECT ON SEQUENCE categories_id_seq TO hayyatuz_menugo_user;
+
+
+ALTER SEQUENCE products_id_seq OWNED BY products.id;
+GRANT USAGE, SELECT ON SEQUENCE products_id_seq TO hayyatuz_menugo_user;
+
+
+ALTER SEQUENCE zakaz_id_seq OWNED BY zakaz.id;
+GRANT USAGE, SELECT ON SEQUENCE zakaz_id_seq TO hayyatuz_menugo_user;
+
+
+ALTER SEQUENCE zakaz_products_id_seq OWNED BY zakaz_products.id;
+GRANT USAGE, SELECT ON SEQUENCE zakaz_products_id_seq TO hayyatuz_menugo_user;
+
+
+
