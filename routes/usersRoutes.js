@@ -115,4 +115,15 @@ router.get('/', async (req, res) => {
     }
 });
 
+
+router.get('/offitsant', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM users WHERE type = $1', [1]);
+        res.status(200).json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
 module.exports = router;

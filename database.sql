@@ -45,6 +45,7 @@ CREATE TABLE products (
 CREATE TABLE zakaz(
     id SERIAL PRIMARY KEY,
     user_id INT,
+    number_stol INTEGER,
     status INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -55,6 +56,8 @@ CREATE TABLE zakaz_products (
     product_id INT,   
     zakaz_id INT,
     count INT,
+    price INTEGER,
+    fastfood_id INTEGER,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
