@@ -10,25 +10,24 @@ const secretKey = 'your_secret_key'; // Maxfiy kalit
 
 // Foydalanuvchini ro'yxatdan o'tkazish
 router.post('/register', async (req, res) => {
-    const { username, phone_number, password, type, description, prosent,is_active,order} = req.body;
+    const { username, phone_number, password, type, description, prosent,is_active,orders} = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    var image =upload_file()
+    var image =upload_file(req)
     try {
         const result = await pool.query(
-            'INSERT INTO users (username, phone_number, password, type,image, description, prosent,is_active,order) VALUES ($1, $2, $3, $4,$5,$6,$7,$8,$9) RETURNING *',
-            [username, phone_number, hashedPassword, type,image, description, prosent,is_active,order]
+            'INSERT INTO users (username, phone_number, password, type,image, description, prosent,is_active,orders) VALUES ($1, $2, $3, $4,$5,$6,$7,$8,$9) RETURNING *',
+            [username, phone_number, hashedPassword, type,image, description, prosent,is_active,orders]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'User registration failed' });
+        res.status(500).json({ error:err.message });
     }
 });
 
 // Foydalanuvchini autentifikatsiya qilish
-router.post('/login', async (req, res) => {
+router.post('/login/', async (req, res) => {
     const { username, password } = req.body;
-    
     try {
         const userResult = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
         const user = userResult.rows[0];
@@ -41,7 +40,7 @@ router.post('/login', async (req, res) => {
         res.status(200).json({ token, user });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error:err.message });
     }
 });
 
@@ -59,22 +58,22 @@ router.get('/:id', async (req, res) => {
         res.status(200).json(user);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: err.message });
     }
 });
 
 // Foydalanuvchini yangilash
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { username, phone_number, type, is_active,description,prosent,order} = req.body;
+    const { username, type, is_active,description,prosent,orders} = req.body;
 
     try {
         const result1 = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
         const user = result1.rows[0];
         var image=put_file(user.image,req)
         const result = await pool.query(
-            'UPDATE users SET username = $1, phone_number = $2, type = $3, is_active = $4, image=$5, description=$6,prosent=$7, updated_at = CURRENT_TIMESTAMP,order=$8 WHERE id = $9 RETURNING *',
-            [username, phone_number, type, is_active,image,description,prosent,order,id]
+            'UPDATE users SET username = $1, type = $2, is_active = $3, image=$4, description=$5,prosent=$6, updated_at = CURRENT_TIMESTAMP,orders=$7 WHERE id = $8 RETURNING *',
+            [username, type, is_active,image,description,prosent,orders,id]
         );
         const updatedUser = result.rows[0];
 
@@ -84,7 +83,7 @@ router.put('/:id', async (req, res) => {
         res.status(200).json(updatedUser);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: err.message });
     }
 });
 
@@ -100,7 +99,7 @@ router.delete('/:id', async (req, res) => {
         res.status(204).send();
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: err.message });
     }
 });
 
@@ -111,18 +110,17 @@ router.get('/', async (req, res) => {
         res.status(200).json(result.rows);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: err.message });
     }
 });
 
-
 router.get('/offitsant', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM users WHERE type = $1', [1]);
+        const result = await pool.query('SELECT * FROM users ',);
         res.status(200).json(result.rows);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(400).json({ error: err.message });
     }
 });
 

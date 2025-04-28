@@ -7,7 +7,7 @@ CREATE TABLE users (
     description TEXT,
     count_seen INTEGER DEFAULT 0,
     prosent FLOAT,
-    order INTEGER,
+    orders INTEGER,
     password VARCHAR(255) UNIQUE NOT NULL,  -- UNIQUE cheklovi qo'shildi
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,

@@ -22,7 +22,11 @@ const io = new Server(server, {
         methods: ['GET', 'PUT','POST']
     }
 });
-
+// Middleware for error handling
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Serverda xato yuz berdi', error: err.message });
+});
 app.use(cors({ origin: '*' }));
 app.use(fileUpload());
 app.use(express.json());
@@ -51,10 +55,17 @@ app.get('/offitsant', async (req, res) => {
       res.status(200).json(result.rows);
   } catch (err) {
       console.error(err);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: err.message });
   }
 });
+// Global error handler
+app.use((err, req, res, next) => {
+    if (err.message.includes('501')) {
+        return res.status(501).json({ message: err.message });
+    }
+    res.status(500).json({ message: 'Umumiy xato', error: err.message });
+});
 // Serverni ishga tushirish
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });

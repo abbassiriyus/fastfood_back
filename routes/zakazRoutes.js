@@ -3,21 +3,6 @@ const pool = require('../db'); // db.js faylidan poolni import qilish
 
 const router = express.Router();
 
-// Yangi zakaz yaratish
-router.post('/', async (req, res) => {
-    const { user_id,status,number_stol } = req.body;
-    
-    try {
-        const result = await pool.query(
-            'INSERT INTO zakaz (user_id,status,number_stol) VALUES ($1,$2,$3) RETURNING *',
-            [user_id, status,number_stol]
-        );
-        res.status(201).json(result.rows[0]);
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Zakaz yaratishda xato' });
-    }
-});
 
 // Zakaz ma'lumotlarini olish
 router.get('/:id', async (req, res) => {
@@ -28,12 +13,12 @@ router.get('/:id', async (req, res) => {
         const zakaz = result.rows[0];
 
         if (!zakaz) {
-            return res.status(404).json({ error: 'Zakaz topilmadi' });
+            return res.status(404).json({ error:err.message });
         }
         res.status(200).json(zakaz);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Zakazni olishda xato' });
+        res.status(500).json({ error: err.message});
     }
 });
 
@@ -68,7 +53,7 @@ router.delete('/:id', async (req, res) => {
         res.status(204).send();
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Zakazni o\'chirishda xato' });
+        res.status(500).json({ error: err.message});
     }
 });
 
@@ -79,7 +64,7 @@ router.get('/', async (req, res) => {
         res.status(200).json(result.rows);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Barcha zakazlarni olishda xato' });
+        res.status(500).json({ error:err.message});
     }
 });
 

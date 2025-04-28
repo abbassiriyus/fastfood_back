@@ -22,7 +22,7 @@ router.post('/', async (req, res) => {
         res.status(201).json(results.map(result => result.rows[0]));
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Zakaz mahsulotlarini yaratishda xato' });
+        res.status(500).json({ error:err.message });
     }
 });
 // Zakaz mahsuloti ma'lumotlarini olish
@@ -38,7 +38,7 @@ router.get('/:id', async (req, res) => {
         res.status(200).json(zakazProduct);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Zakaz mahsulotini olishda xato' });
+        res.status(500).json({ error:err.message });
     }
 });
 
@@ -60,7 +60,7 @@ router.put('/:id', async (req, res) => {
         res.status(200).json(updatedZakazProduct);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Zakaz mahsulotini yangilashda xato' });
+        res.status(500).json({ error: err.message });
     }
 });
 
@@ -73,7 +73,7 @@ router.delete('/:id', async (req, res) => {
         res.status(204).send();
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Zakaz mahsulotini o\'chirishda xato' });
+        res.status(500).json({ error:err.message });
     }
 });
 
@@ -84,7 +84,7 @@ router.get('/', async (req, res) => {
         res.status(200).json(result.rows);
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Barcha zakaz mahsulotlarini olishda xato' });
+        res.status(500).json({ error:err.message});
     }
 });
 

@@ -25,9 +25,26 @@ const zakazRouter1 = (io) => {
             res.status(200).json(updatedZakaz);
         } catch (err) {
             console.error(err);
-            res.status(500).json({ error: 'Zakazni yangilashda xato' });
+            res.status(500).json({ error: err.message });
         }
     });
+    // Yangi zakaz yaratish
+    router.post('/', async (req, res) => {
+        const { user_id,status,number_stol } = req.body;
+        
+        try {
+            const result = await pool.query(
+                'INSERT INTO zakaz (user_id,status,number_stol) VALUES ($1,$2,$3) RETURNING *',
+                [user_id, status,number_stol]
+            );
+            io.emit('zakazUpdated', result.rows[0]);
+            res.status(201).json(result.rows[0]);
+        } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: err.message });
+        }
+    });
+    
 
     return router;
 };
