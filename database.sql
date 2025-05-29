@@ -13,6 +13,13 @@ CREATE TABLE users (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     is_active BOOLEAN DEFAULT FALSE
 );
+CREATE TABLE tarixoylik(
+    id SERIAL PRIMARY KEY,
+    user_id INT,
+    price INTEGER NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+)
 
 CREATE TABLE carousel (
     id SERIAL PRIMARY KEY,
@@ -26,7 +33,7 @@ CREATE TABLE categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     fastfood_id INT,
-    order INTEGER,
+    orders INTEGER,
     FOREIGN KEY (fastfood_id) REFERENCES fastfood(id),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
@@ -42,6 +49,7 @@ CREATE TABLE products (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE zakaz(
     id SERIAL PRIMARY KEY,
     user_id INT,
@@ -50,7 +58,6 @@ CREATE TABLE zakaz(
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
-
 CREATE TABLE zakaz_products (
     id SERIAL PRIMARY KEY,
     product_id INT,   
@@ -62,11 +69,22 @@ CREATE TABLE zakaz_products (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE protsent(
+    id SERIAL PRIMARY KEY,
+    foiz FLOAT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 ALTER SEQUENCE users_id_seq OWNED BY users.id;
 GRANT USAGE, SELECT ON SEQUENCE users_id_seq TO hayyatuz_menugo_user;
 
+ALTER SEQUENCE protsent_id_seq OWNED BY protsent.id;
+GRANT USAGE, SELECT ON SEQUENCE protsent_id_seq TO hayyatuz_menugo_user;
+
 ALTER SEQUENCE carousel_id_seq OWNED BY carousel.id;
 GRANT USAGE, SELECT ON SEQUENCE carousel_id_seq TO hayyatuz_menugo_user;
+
 
 
 
@@ -84,6 +102,10 @@ GRANT USAGE, SELECT ON SEQUENCE zakaz_id_seq TO hayyatuz_menugo_user;
 
 ALTER SEQUENCE zakaz_products_id_seq OWNED BY zakaz_products.id;
 GRANT USAGE, SELECT ON SEQUENCE zakaz_products_id_seq TO hayyatuz_menugo_user;
+
+
+ALTER SEQUENCE tarixoylik_id_seq OWNED BY tarixoylik.id;
+GRANT USAGE, SELECT ON SEQUENCE tarixoylik_id_seq TO hayyatuz_menugo_user;
 
 
 

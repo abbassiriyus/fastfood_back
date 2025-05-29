@@ -64,16 +64,20 @@ router.put('/:id', async (req, res) => {
     }
 });
 
-// Zakaz mahsulotini o'chirish
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        await pool.query('DELETE FROM zakaz_products WHERE id = $1', [id]);
+        // Zakaz mahsulotlarini zakaz_id bo'yicha o'chirish
+        await pool.query('DELETE FROM zakaz_products WHERE zakaz_id = $1', [id]);
+        
+        // Zakazni o'chirish (agar kerak bo'lsa)
+        await pool.query('DELETE FROM zakaz WHERE id = $1', [id]);
+        
         res.status(204).send();
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error:err.message });
+        res.status(500).json({ error: err.message });
     }
 });
 

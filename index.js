@@ -11,6 +11,8 @@ const zakazProductsRoutes = require('./routes/zakazProductsRoutes.js'); // Zakaz
 const categoriesRoutes = require('./routes/categoriesRoutes.js'); // Kategoriyalar uchun router
 const carouselRoutes = require("./routes/carouselRoutes.js");
 const productsRoutes = require("./routes/productsRoutes.js");
+const TarixOylikRouter =require("./routes/tarixOylikRoutes.js")
+const ProsentRouter=require('./routes/protsentRouter.js')
 const pool = require('./db.js');
 
 const app = express();
@@ -39,6 +41,9 @@ app.use('/zakaz_products', zakazProductsRoutes); // Zakaz mahsulotlari uchun end
 app.use('/categories', categoriesRoutes); // Kategoriyalar uchun endpoint
 app.use('/carousel', carouselRoutes); // Kategoriyalar uchun endpoint
 app.use('/products', productsRoutes); // Kategoriyalar uchun endpoint
+app.use('/protsent', ProsentRouter); // Kategoriyalar uchun endpoint
+app.use('/tarixoylik', TarixOylikRouter ); // Kategoriyalar uchun endpoint
+
 
 // Socket.io bilan bog'liq router
 app.use('/zakaz', zakazRoutes1(io));
@@ -46,7 +51,7 @@ app.use('/zakaz', zakazRoutes1(io));
 // Socket.io ulanishi
 io.on('connection', (socket) => {
     console.log('Yangi foydalanuvchi ulandi');
-
+    
     // Sizning boshqa hodisalarni qo'shishingiz mumkin
 });
 app.get('/offitsant', async (req, res) => {
