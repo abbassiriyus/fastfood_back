@@ -44,38 +44,7 @@ router.post('/login/', async (req, res) => {
     }
 });
 
-router.get('/api/fastfood-revenue', async (req, res) => {
-    try {
-        const today = new Date();
-        const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        
-        const query = `
-            SELECT 
-                fastfood_id,
-                SUM(price * count) AS revenue,
-                DATE_TRUNC('day', created_at) AS day
-            FROM 
-                zakaz_products
-            JOIN 
-                zakaz ON zakaz.id = zakaz_products.zakaz_id
-            JOIN 
-                users ON zakaz.user_id = users.id
-            WHERE 
-                users.type = 2 AND
-                created_at >= $1
-            GROUP BY 
-                fastfood_id, day
-            ORDER BY 
-                day;
-        `;
 
-        const result = await pool.query(query, [startOfMonth]);
-        res.json(result.rows);
-    } catch (error) {
-        console.error('Error fetching revenue:', error);
-        res.status(500).send('Server error');
-    }
-});
 router.post('/reset-password', async (req, res) => {
     const { token, oldPassword, newPassword } = req.body;
 
@@ -158,6 +127,58 @@ router.put('/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+router.put('/:id/count_seen', async (req, res) => {
+    const { id } = req.params;
+    const { count_seen } = req.body; // yangi count_seen qiymati
+
+    try {
+        // Avval foydalanuvchini tekshiramiz
+        const result1 = await pool.query('SELECT count_seen FROM users WHERE id = $1', [id]);
+        const user = result1.rows[0];
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const newCountSeen = user.count_seen + count_seen;
+
+        // Yangilash
+        const result = await pool.query(
+            'UPDATE users SET count_seen = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *',
+            [newCountSeen, id]
+        );
+
+        const updatedUser = result.rows[0];
+        res.status(200).json(updatedUser);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+router.put('/:id/reset-count', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const result = await pool.query(
+            'UPDATE users SET count_seen = 0, updated_at = CURRENT_TIMESTAMP WHERE id = $1 RETURNING *',
+            [id]
+        );
+
+        const updatedUser = result.rows[0];
+
+        if (!updatedUser) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.status(200).json(updatedUser);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 // Foydalanuvchini yangilash
 router.put('/fastfood/:id', async (req, res) => {
