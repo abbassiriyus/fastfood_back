@@ -43,6 +43,7 @@ CREATE TABLE products (
     name VARCHAR(100) NOT NULL,
     category_id INT,
     image TEXT NOT NULL,
+    orders INT,
     description TEXT NOT NULL,
     price INTEGER NOT NULL,
     is_active BOOLEAN DEFAULT FALSE,

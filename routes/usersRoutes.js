@@ -16,7 +16,7 @@ router.post('/register', async (req, res) => {
     try {
         const result = await pool.query(
             'INSERT INTO users (username, phone_number, password, type,image, description, prosent,is_active,orders) VALUES ($1, $2, $3, $4,$5,$6,$7,$8,$9) RETURNING *',
-            [username, phone_number, hashedPassword, type,image, description, prosent,is_active,orders]
+            [username, phone_number, hashedPassword, type,image, description, prosent,is_active,orders*1]
         );
         res.status(201).json(result.rows[0]);
     } catch (err) {
@@ -212,7 +212,7 @@ router.delete('/:id', async (req, res) => {
     try {
         const result = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
         const user = result.rows[0];
-        delete_file(user.image)
+        if(user.image){ delete_file(user.image)}
         await pool.query('DELETE FROM users WHERE id = $1', [id]);
         res.status(204).send();
     } catch (err) {

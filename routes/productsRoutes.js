@@ -7,9 +7,9 @@ const router = express.Router();
 
 // Create product
 router.post('/', async (req, res) => {
-  const { name, category_id,description,price,is_active } = req.body;
+  const { name, category_id,description,price,is_active,orders } = req.body;
   var image=upload_file(req)
-  const result = await pool.query('INSERT INTO products(name, category_id,image,description,price,is_active) VALUES($1, $2,$3,$4,$5,$6) RETURNING *', [name, category_id,image,description,price,is_active]);
+  const result = await pool.query('INSERT INTO products(name, category_id,image,description,price,is_active,orders) VALUES($1, $2,$3,$4,$5,$6,$7) RETURNING *', [name, category_id,image,description,price,is_active,orders]);
   res.json(result.rows[0]);
 });
 
@@ -37,11 +37,11 @@ router.put('/fastfood/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try{
        const { id } = req.params;
-  const { name, category_id,description,price,is_active } = req.body;
+  const { name, category_id,description,price,is_active,orders } = req.body;
   const result1 = await pool.query('SELECT * FROM products WHERE id = $1', [id]);
   const product = result1.rows[0];
   var image=put_file(product.image,req)
-  const result = await pool.query('UPDATE products SET name = $1, category_id = $2,image=$3,description=$4,price=$5,is_active=$6 WHERE id = $7 RETURNING *', [name, category_id,image,description,price,is_active,id]);
+  const result = await pool.query('UPDATE products SET name = $1, category_id = $2,image=$3,description=$4,price=$5,is_active=$6,orders=$7 WHERE id = $8 RETURNING *', [name, category_id,image,description,price,is_active,orders,id]);
   res.json(result.rows[0]);   
     } catch (err) {
         console.error(err);

@@ -29,11 +29,14 @@ send_image_link="no"
   }
 
 var delete_file=(file_name)=>{ 
-var file_tit=file_name.slice(file_name.lastIndexOf('/')+1)
+  if (file_name) {
+    var file_tit=file_name.slice(file_name.lastIndexOf('/')+1)
 console.log(file_name,file_tit);
 if(file_tit.includes("local_image")){
  fs.unlink(`${__dirname}/../uploads/${file_tit}`,()=>{})   
 }
+  }
+
 }
 
 async function updateEnvUrl(newUrl) {
@@ -75,6 +78,7 @@ var put_file=(file_name,req)=>{
     }else{
      send_image_link=req.body.image
     }
+    
   return send_image_link
 
 }
