@@ -77,8 +77,28 @@ CREATE TABLE protsent(
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE gl_carousel(
+    id SERIAL PRIMARY KEY,
+    image TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE history_delete(
+    id SERIAL PRIMARY KEY,
+    food_id INTEGER,
+    stul INTEGER,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
 ALTER SEQUENCE users_id_seq OWNED BY users.id;
 GRANT USAGE, SELECT ON SEQUENCE users_id_seq TO hayyatuz_menugo_user;
+
+ALTER SEQUENCE gl_carousel_id_seq OWNED BY gl_carousel.id;
+GRANT USAGE, SELECT ON SEQUENCE gl_carousel_id_seq TO hayyatuz_menugo_user;
+
+ALTER SEQUENCE history_delete_id_seq OWNED BY history_delete.id;
+GRANT USAGE, SELECT ON SEQUENCE history_delete_id_seq TO hayyatuz_menugo_user;
 
 ALTER SEQUENCE protsent_id_seq OWNED BY protsent.id;
 GRANT USAGE, SELECT ON SEQUENCE protsent_id_seq TO hayyatuz_menugo_user;

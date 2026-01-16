@@ -13,6 +13,9 @@ const carouselRoutes = require("./routes/carouselRoutes.js");
 const productsRoutes = require("./routes/productsRoutes.js");
 const TarixOylikRouter =require("./routes/tarixOylikRoutes.js")
 const ProsentRouter=require('./routes/protsentRouter.js')
+const historyDeleteRoutes=require('./routes/historyDeleteRoutes.js')
+const glCarouselRoutes=require('./routes/glCarouselRoutes.js')
+
 const pool = require('./db.js');
 
 const app = express();
@@ -36,6 +39,9 @@ app.use(express.static('./uploads'));
 
 // Routerlarni qo'shish
 app.use('/users', userRoutes); // Foydalanuvchilar uchun endpoint
+app.use('/karzinkadelete', historyDeleteRoutes); // karzinkada ochirilgan buyurmalar
+app.use('/glcarousel', glCarouselRoutes); //asosiy oyna karusel
+
 app.use('/zakaz', zakazRoutes); // Zakazlar uchun endpoint
 app.use('/zakaz_products', zakazProductsRoutes); // Zakaz mahsulotlari uchun endpoint
 app.use('/categories', categoriesRoutes); // Kategoriyalar uchun endpoint
